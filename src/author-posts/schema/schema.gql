@@ -1,0 +1,41 @@
+type Author {
+  id: Int!
+  firstName: String
+  lastName: String
+  posts: [Post]
+}
+
+type Post {
+  id: Int!
+  title: String!
+  votes: Int
+  authorId: Int!
+}
+
+input CreatePostInput {
+  title: String!
+  authorId: Int!
+}
+
+input UpdatePostInput {
+  id: Int!
+  title: String!
+  authorId: Int!
+}
+
+type Query {
+  author(id: Int!): Author
+  allPosts: [Post]!
+  getAuthorsByArgs(firstName: String, lastName: String = ""): [Author]
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): Post!
+  update(input: UpdatePostInput!): Post!
+  upvotePost(postId: Int!): Post!
+  deletePost(postId: Int!): Post!
+}
+
+type Subscription {
+  createdPost(input: String!): Post!
+}
