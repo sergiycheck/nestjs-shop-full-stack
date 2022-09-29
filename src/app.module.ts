@@ -4,11 +4,10 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import Joi from 'joi';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSourceOptions } from 'typeorm';
-
+import { options } from 'data-source';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -33,22 +32,7 @@ import { DataSourceOptions } from 'typeorm';
       }),
     }),
 
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        const dataSourceConfig: DataSourceOptions = {
-          type: 'postgres',
-          host: configService.get('POSTGRES_HOST'),
-          port: +configService.get('POSTGRES_PORT'),
-          username: configService.get('POSTGRES_USER'),
-          password: configService.get('POSTGRES_PASSWORD'),
-          database: configService.get('POSTGRES_DB'),
-        };
-
-        return dataSourceConfig;
-      },
-      inject: [ConfigService],
-    }),
+    TypeOrmModule.forRoot({ ...options }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       typePaths: ['./**/*.{gql,graphql}'],

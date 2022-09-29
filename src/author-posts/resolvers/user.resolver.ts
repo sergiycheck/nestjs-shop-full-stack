@@ -16,9 +16,9 @@ import {
   Resolver,
   Subscription,
 } from '@nestjs/graphql';
-import { AuthorsService } from './authors.service';
-import { PostsService } from './posts.service';
-import GetAuthorArgs from './dtos/get-author.args';
+import { AuthorsService } from '../services/authors.service';
+import { PostsService } from '../services/posts.service';
+import GetAuthorArgs from '../dtos/get-author.args';
 import { Inject } from '@nestjs/common';
 
 @Resolver('Author')

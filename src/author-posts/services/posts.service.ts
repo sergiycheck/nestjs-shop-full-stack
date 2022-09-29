@@ -1,5 +1,11 @@
-import { CreatePostInput, Post, UpdatePostInput } from './../../graphql';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreatePostInput, Post, UpdatePostInput } from 'src/graphql';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { AuthorsService } from './authors.service';
 
 type FindAllParams = {
   authorId?: number;
@@ -8,7 +14,11 @@ type FindAllParams = {
 @Injectable()
 export class PostsService {
   public posts: Post[];
-  constructor() {
+
+  constructor(
+    @Inject(forwardRef(() => AuthorsService))
+    private readonly authorsService: AuthorsService,
+  ) {
     this.posts = [
       {
         id: 1,

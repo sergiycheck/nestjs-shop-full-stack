@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Author } from 'src/graphql';
-import GetAuthorArgs from './dtos/get-author.args';
+import GetAuthorArgs from '../dtos/get-author.args';
 import { PostsService } from './posts.service';
 
 @Injectable()
 export class AuthorsService {
   authorsInMemory: Author[];
-  constructor(private readonly postsService: PostsService) {
+  constructor(
+    @Inject(forwardRef(() => PostsService))
+    private readonly postsService: PostsService,
+  ) {
     const { posts } = postsService;
     this.authorsInMemory = [
       {
