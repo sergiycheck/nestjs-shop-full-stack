@@ -15,6 +15,7 @@ export const options: PostgresConnectionOptions = {
   entities: ['entities/*.entity.ts'],
   migrationsRun: true,
   migrationsTableName: 'typeorm_migrations',
+  migrations: ['dist/migrations/*.js'],
   cli: {
     migrationsDir: 'migrations',
   },
