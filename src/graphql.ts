@@ -8,6 +8,21 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export class CreateUserInput {
+    email: string;
+    username?: Nullable<string>;
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
+}
+
+export class UpdateUserInput {
+    id: number;
+    firstName?: Nullable<string>;
+    lastName?: Nullable<string>;
+    username?: Nullable<string>;
+    email?: Nullable<string>;
+}
+
 export class CreatePostInput {
     title: string;
     authorId: number;
@@ -19,11 +34,15 @@ export class UpdatePostInput {
     authorId: number;
 }
 
-export class Author {
-    __typename?: 'Author';
+export class User {
+    __typename?: 'User';
     id: number;
     firstName?: Nullable<string>;
     lastName?: Nullable<string>;
+    username: string;
+    email: string;
+    isActive?: Nullable<boolean>;
+    created_at: number;
     posts?: Nullable<Nullable<Post>[]>;
 }
 
@@ -33,24 +52,35 @@ export class Post {
     title: string;
     votes?: Nullable<number>;
     authorId: number;
+    created_at: number;
 }
 
 export abstract class IQuery {
     __typename?: 'IQuery';
 
-    abstract author(id: number): Nullable<Author> | Promise<Nullable<Author>>;
+    abstract userById(id: number): Nullable<User> | Promise<Nullable<User>>;
 
-    abstract allPosts(): Nullable<Post>[] | Promise<Nullable<Post>[]>;
+    abstract users(): Nullable<User>[] | Promise<Nullable<User>[]>;
 
-    abstract getAuthorsByArgs(firstName?: Nullable<string>, lastName?: Nullable<string>): Nullable<Nullable<Author>[]> | Promise<Nullable<Nullable<Author>[]>>;
+    abstract getUsersByFirstAndLast(firstName?: Nullable<string>, lastName?: Nullable<string>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
+
+    abstract postById(id: number): Nullable<Post> | Promise<Nullable<Post>>;
+
+    abstract posts(): Nullable<Post>[] | Promise<Nullable<Post>[]>;
 }
 
 export abstract class IMutation {
     __typename?: 'IMutation';
 
+    abstract createUser(input: CreateUserInput): User | Promise<User>;
+
+    abstract updateUser(input: UpdateUserInput): User | Promise<User>;
+
+    abstract deleteUser(userId: number): User | Promise<User>;
+
     abstract createPost(input: CreatePostInput): Post | Promise<Post>;
 
-    abstract update(input: UpdatePostInput): Post | Promise<Post>;
+    abstract updatePost(input: UpdatePostInput): Post | Promise<Post>;
 
     abstract upvotePost(postId: number): Post | Promise<Post>;
 

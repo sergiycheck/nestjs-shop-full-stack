@@ -1,11 +1,6 @@
 import { REDIS_PUB_SUB } from './../constants';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
-import {
-  CreatePostInput,
-  Author,
-  UpdatePostInput,
-  Post,
-} from './../../graphql';
+import { CreatePostInput, User, UpdatePostInput, Post } from './../../graphql';
 import {
   Args,
   Int,
@@ -21,7 +16,7 @@ import { PostsService } from '../services/posts.service';
 import GetAuthorArgs from '../dtos/get-author.args';
 import { Inject } from '@nestjs/common';
 
-@Resolver('Author')
+@Resolver('User')
 export class AuthorsResolver {
   constructor(
     @Inject(REDIS_PUB_SUB) private redisPubSub: RedisPubSub,
@@ -77,7 +72,7 @@ export class AuthorsResolver {
   }
 
   @ResolveField('posts')
-  async getPostsByAuthor(@Parent() author: Author) {
+  async getPostsByAuthor(@Parent() author: User) {
     const { id } = author;
     return this.postsService.findAllByAuthor({ authorId: id });
   }

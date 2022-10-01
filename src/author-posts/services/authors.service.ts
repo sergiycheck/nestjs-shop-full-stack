@@ -1,40 +1,54 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { Author } from 'src/graphql';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateUserInput } from 'src/graphql';
+import { Repository } from 'typeorm';
 import GetAuthorArgs from '../dtos/get-author.args';
+import { User } from '../entities/user.entity';
 import { PostsService } from './posts.service';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class AuthorsService {
-  authorsInMemory: Author[];
   constructor(
     @Inject(forwardRef(() => PostsService))
     private readonly postsService: PostsService,
-  ) {
-    const { posts } = postsService;
-    this.authorsInMemory = [
-      {
-        id: 1,
-        firstName: 'first 1',
-        lastName: 'last 1',
-        posts: [posts[0], posts[1]],
-      },
-      {
-        id: 2,
-        firstName: 'name 2',
-        lastName: 'last 2',
-        posts: [posts[2]],
-      },
-    ];
+
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
+
+  async create(dto: CreateUserInput) {
+    const newUser = this.usersRepository.create({
+      username: dto.username ?? `unnamed-${randomUUID()}`,
+      email: dto.email,
+      firstName: dto.firstName ?? '',
+      lastName: dto.lastName ?? '',
+    });
+
+    return this.usersRepository.save(newUser);
   }
+
   findOneById(id: number) {
-    return this.authorsInMemory.find((a) => a.id == id);
+    return this.usersRepository.findOneBy({ id });
   }
 
   getAuthorsByArgs(args: GetAuthorArgs) {
-    return this.authorsInMemory.filter(
-      (a) =>
-        a.firstName.startsWith(args.firstName) ||
-        a.lastName.startsWith(args.lastName),
-    );
+    const tableName = this.usersRepository.metadata.tableName;
+    const builder = this.usersRepository.createQueryBuilder(tableName);
+    const { firstName, lastName } = args;
+
+    if (firstName) {
+      builder.where(`position(:firstName in ${tableName}.firstName) > 0)`, {
+        firstName,
+      });
+    }
+
+    if (lastName) {
+      builder.where(`position(:lastName in ${tableName}.lastName) > 0)`, {
+        lastName,
+      });
+    }
+
+    return builder.getMany();
   }
 }

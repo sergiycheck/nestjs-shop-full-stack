@@ -1,8 +1,27 @@
-type Author {
+type User {
   id: Int!
   firstName: String
   lastName: String
+  username: String!
+  email: String!
+  isActive: Boolean
+  created_at: Int!
   posts: [Post]
+}
+
+input CreateUserInput {
+  email: String!
+  username: String
+  firstName: String
+  lastName: String
+}
+
+input UpdateUserInput {
+  id: Int!
+  firstName: String
+  lastName: String
+  username: String
+  email: String
 }
 
 type Post {
@@ -10,6 +29,7 @@ type Post {
   title: String!
   votes: Int
   authorId: Int!
+  created_at: Int!
 }
 
 input CreatePostInput {
@@ -24,14 +44,21 @@ input UpdatePostInput {
 }
 
 type Query {
-  author(id: Int!): Author
-  allPosts: [Post]!
-  getAuthorsByArgs(firstName: String, lastName: String = ""): [Author]
+  userById(id: Int!): User
+  users: [User]!
+  getUsersByFirstAndLast(firstName: String, lastName: String = ""): [User]
+
+  postById(id: Int!): Post
+  posts: [Post]!
 }
 
 type Mutation {
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
+  deleteUser(userId: Int!): User!
+
   createPost(input: CreatePostInput!): Post!
-  update(input: UpdatePostInput!): Post!
+  updatePost(input: UpdatePostInput!): Post!
   upvotePost(postId: Int!): Post!
   deletePost(postId: Int!): Post!
 }
