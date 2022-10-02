@@ -1,0 +1,8 @@
+select * from public.user
+offset 0 limit 100
+
+select * from public.post
+offset 0 limit 100
+
+select* from public.typeorm_migrations
+offset 0 limit 100;
