@@ -11,7 +11,7 @@ export class Post extends BaseEntity {
   votes: number;
 
   @Column()
-  authorId: number;
+  userId: number;
 
   @ManyToOne(() => User, (user) => user.posts)
   user: User;

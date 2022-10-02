@@ -25,6 +25,7 @@ export class Initial1664474542276 implements MigrationInterface {
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
             generationStrategy: 'increment',
           },
           {
@@ -81,6 +82,7 @@ export class Initial1664474542276 implements MigrationInterface {
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
             generationStrategy: 'increment',
           },
           {
@@ -104,7 +106,7 @@ export class Initial1664474542276 implements MigrationInterface {
     await queryRunner.addColumn(
       postsTableName,
       new TableColumn({
-        name: 'authorId',
+        name: 'userId',
         type: 'int',
       }),
     );
@@ -112,7 +114,7 @@ export class Initial1664474542276 implements MigrationInterface {
     await queryRunner.createForeignKey(
       postsTableName,
       new TableForeignKey({
-        columnNames: ['authorId'],
+        columnNames: ['userId'],
         referencedColumnNames: ['id'],
         referencedTableName: usersTableName,
         onDelete: 'CASCADE',
@@ -125,12 +127,12 @@ export class Initial1664474542276 implements MigrationInterface {
 
     const table = await queryRunner.getTable(postsTableName);
     const foreignKey = table.foreignKeys.find(
-      (fk) => fk.columnNames.indexOf('authorId') !== -1,
+      (fk) => fk.columnNames.indexOf('userId') !== -1,
     );
 
     await queryRunner.dropForeignKey(postsTableName, foreignKey);
-    await queryRunner.dropForeignKey(postsTableName, 'authorId');
     await queryRunner.dropTable(postsTableName);
+
     await queryRunner.dropIndex(usersTableName, 'IDX_USERNAME_NAME');
     await queryRunner.dropIndex(usersTableName, 'IDX_EMAIL_NAME');
     await queryRunner.dropTable(usersTableName);

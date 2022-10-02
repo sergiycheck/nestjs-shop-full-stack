@@ -1,11 +1,11 @@
 import { Field, ArgsType } from '@nestjs/graphql';
 
 @ArgsType()
-class GetAuthorArgs {
+class GetUserArgs {
   @Field({ nullable: true })
   firstName?: string;
 
   @Field({ defaultValue: '' })
   lastName: string;
 }
-export default GetAuthorArgs;
+export default GetUserArgs;

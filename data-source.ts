@@ -1,19 +1,12 @@
-import { DataSource } from 'typeorm';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import Config from './src/config/config';
 
-declare module 'typeorm/driver/postgres/PostgresConnectionOptions' {
-  interface PostgresConnectionOptions {
-    cli?: {
-      migrationsDir: string;
-    };
-  }
-}
-
-export const options: PostgresConnectionOptions = {
+export const options: DataSourceOptions = {
   ...Config.postgresDbOptions,
-  entities: ['entities/*.entity.ts'],
+  // adds entities to entities array with forFeature method
+  autoLoadEntities: true,
   migrationsRun: true,
+  logging: true,
   migrationsTableName: 'typeorm_migrations',
   migrations: ['dist/migrations/*.js'],
   cli: {

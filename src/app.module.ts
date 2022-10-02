@@ -1,4 +1,3 @@
-import { AuthorPostsModule } from './author-posts/authorPosts.module';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -6,8 +5,10 @@ import { join } from 'path';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { ConfigModule } from '@nestjs/config';
 import Joi from 'joi';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { options } from 'data-source';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserPostsModule } from './user-posts/userPosts.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -49,7 +50,7 @@ import { options } from 'data-source';
         'graphql-ws': true,
       },
     }),
-    AuthorPostsModule,
+    UserPostsModule,
   ],
   controllers: [],
   providers: [],

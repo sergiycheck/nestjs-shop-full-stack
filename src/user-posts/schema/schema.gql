@@ -5,7 +5,7 @@ type User {
   username: String!
   email: String!
   isActive: Boolean
-  created_at: Int!
+  created_at: String!
   posts: [Post]
 }
 
@@ -28,28 +28,39 @@ type Post {
   id: Int!
   title: String!
   votes: Int
-  authorId: Int!
-  created_at: Int!
+  userId: Int!
+  user: User!
+  created_at: String!
 }
 
 input CreatePostInput {
   title: String!
-  authorId: Int!
+  userId: Int!
 }
 
 input UpdatePostInput {
   id: Int!
   title: String!
-  authorId: Int!
+  userId: Int!
+}
+
+input GetPaginatedInput {
+  page: Int!
+  perPage: Int
+}
+
+input GetPostsByUser {
+  userId: Int!
 }
 
 type Query {
+  users(input: GetPaginatedInput): [User]!
   userById(id: Int!): User
-  users: [User]!
   getUsersByFirstAndLast(firstName: String, lastName: String = ""): [User]
 
+  posts(input: GetPaginatedInput): [Post]!
   postById(id: Int!): Post
-  posts: [Post]!
+  postsByUserId(input: GetPostsByUser!): [Post]!
 }
 
 type Mutation {

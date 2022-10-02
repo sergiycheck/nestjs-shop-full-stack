@@ -25,13 +25,22 @@ export class UpdateUserInput {
 
 export class CreatePostInput {
     title: string;
-    authorId: number;
+    userId: number;
 }
 
 export class UpdatePostInput {
     id: number;
     title: string;
-    authorId: number;
+    userId: number;
+}
+
+export class GetPaginatedInput {
+    page: number;
+    perPage?: Nullable<number>;
+}
+
+export class GetPostsByUser {
+    userId: number;
 }
 
 export class User {
@@ -42,7 +51,7 @@ export class User {
     username: string;
     email: string;
     isActive?: Nullable<boolean>;
-    created_at: number;
+    created_at: string;
     posts?: Nullable<Nullable<Post>[]>;
 }
 
@@ -51,22 +60,25 @@ export class Post {
     id: number;
     title: string;
     votes?: Nullable<number>;
-    authorId: number;
-    created_at: number;
+    userId: number;
+    user: User;
+    created_at: string;
 }
 
 export abstract class IQuery {
     __typename?: 'IQuery';
 
-    abstract userById(id: number): Nullable<User> | Promise<Nullable<User>>;
+    abstract users(input?: Nullable<GetPaginatedInput>): Nullable<User>[] | Promise<Nullable<User>[]>;
 
-    abstract users(): Nullable<User>[] | Promise<Nullable<User>[]>;
+    abstract userById(id: number): Nullable<User> | Promise<Nullable<User>>;
 
     abstract getUsersByFirstAndLast(firstName?: Nullable<string>, lastName?: Nullable<string>): Nullable<Nullable<User>[]> | Promise<Nullable<Nullable<User>[]>>;
 
+    abstract posts(input?: Nullable<GetPaginatedInput>): Nullable<Post>[] | Promise<Nullable<Post>[]>;
+
     abstract postById(id: number): Nullable<Post> | Promise<Nullable<Post>>;
 
-    abstract posts(): Nullable<Post>[] | Promise<Nullable<Post>[]>;
+    abstract postsByUserId(input: GetPostsByUser): Nullable<Post>[] | Promise<Nullable<Post>[]>;
 }
 
 export abstract class IMutation {

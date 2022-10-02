@@ -1,12 +1,11 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 const pathEnv = path.resolve(process.cwd(), '.env.dev');
 dotenv.config({ path: pathEnv });
 
 type ConfigType = {
-  postgresDbOptions: PostgresConnectionOptions;
+  postgresDbOptions: any;
 };
 
 const Config: ConfigType = {
