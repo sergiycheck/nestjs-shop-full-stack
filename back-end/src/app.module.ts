@@ -1,3 +1,4 @@
+import { ComplexityPlugin } from './common/plugins/complexity';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -8,6 +9,7 @@ import Joi from 'joi';
 import { options } from 'data-source';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserPostsModule } from './user-posts/userPosts.module';
+import { LogErrOnFailure } from './common/plugins/log-err-on-failure';
 
 @Module({
   imports: [
@@ -44,7 +46,7 @@ import { UserPostsModule } from './user-posts/userPosts.module';
         emitTypenameField: true,
       },
 
-      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      plugins: [ApolloServerPluginLandingPageLocalDefault(), LogErrOnFailure],
       subscriptions: {
         'subscriptions-transport-ws': true,
         'graphql-ws': true,
@@ -53,6 +55,6 @@ import { UserPostsModule } from './user-posts/userPosts.module';
     UserPostsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [ComplexityPlugin],
 })
 export class AppModule {}
