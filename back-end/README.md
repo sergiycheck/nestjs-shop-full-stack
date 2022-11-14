@@ -41,3 +41,7 @@ Creating post to trigger subscription with filters
 Getting results in redis by subscribing to the **createdAt** channel
 
 [redis createdAt channel](imgs/redis_createdAt_channel_2022-09-11_22-40-10.png)
+
+[Connect to the remote postgres rds db](https://javascript.plainenglish.io/how-to-use-an-aws-sql-database-with-node-js-and-mysql-workbench-f77a71ac12be)
+
+[graphql subscriptions](https://github.com/apollographql/graphql-subscriptions)

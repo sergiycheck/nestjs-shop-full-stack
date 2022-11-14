@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
 
-const pathEnv = path.resolve(process.cwd(), '.env.dev');
+const pathEnv = path.resolve(process.cwd(), '.env');
 dotenv.config({ path: pathEnv });
 
 type ConfigType = {
@@ -18,5 +18,7 @@ const Config: ConfigType = {
     database: process.env.POSTGRES_DB,
   },
 };
+
+console.log(Config);
 
 export default Config;
